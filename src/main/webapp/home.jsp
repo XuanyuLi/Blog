@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1>主页</h1>
-${sessionScope.nick}
+${requestScope.nick}
 <a href="article.jsp">发表博文</a>
 <form action="" method="post">
     <input type="text" name="title" placeholder="标题"><br>

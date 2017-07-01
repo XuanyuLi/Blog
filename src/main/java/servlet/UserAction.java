@@ -77,6 +77,7 @@ public class UserAction extends HttpServlet {
     }
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String nick = req.getParameter("nick");
         String email = req.getParameter("email").trim();
         String plainPassword = req.getParameter("password");
         Connection connection = Db.getConnection();
@@ -96,9 +97,8 @@ public class UserAction extends HttpServlet {
                 String encryptedPassword = resultSet.getString("password");
                 StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
                 if (encryptor.checkPassword(plainPassword, encryptedPassword)) {
-                    String nick = req.getParameter("nick");
-                    req.getSession().setAttribute("nick", nick);
-                    resp.sendRedirect("home.jsp");
+                    req.setAttribute("nick", nick);
+                    req.getRequestDispatcher("home.jsp").forward(req,resp);
                 }
             } else {
                 req.setAttribute("message", "邮箱或密码错误");
