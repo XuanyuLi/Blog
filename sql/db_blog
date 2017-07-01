@@ -1,0 +1,58 @@
+DROP DATABASE IF EXISTS db_blog;
+CREATE DATABASE db_blog;
+
+DROP TABLE IF EXISTS db_blog.user;
+CREATE TABLE db_blog.user (
+  id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'PK',
+  nick VARCHAR(255) NOT NULL UNIQUE COMMENT '昵称',
+  email VARCHAR(255) NOT NULL UNIQUE COMMENT '邮箱',
+  password VARCHAR(255) NOT NULL UNIQUE COMMENT '密码'
+)COMMENT '用户表';
+
+DROP TABLE IF EXISTS db_blog.blog;
+CREATE TABLE db_blog.blog(
+  id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'PK',
+  title VARCHAR(255) NOT NULL COMMENT '标题',
+  time DATETIME NOT NULL DEFAULT now() COMMENT '发布时间',
+  content TEXT NOT NULL COMMENT '博文内容',
+  userId INT COMMENT 'FK'
+)COMMENT '博文表';
+
+DROP TABLE IF EXISTS db_blog.comment;
+CREATE TABLE db_blog.comment(
+  id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'PK',
+  content TEXT NOT NULL COMMENT '评论内容',
+  time DATETIME NOT NULL COMMENT '评论时间',
+  useId INT COMMENT 'FK',
+  blogId INT COMMENT 'FK'
+)COMMENT '评论表';
+
+ALTER TABLE db_blog.blog
+    ADD CONSTRAINT
+blog_fk_userId
+FOREIGN KEY (userId)
+  REFERENCES db_blog.user(id);
+
+ALTER TABLE db_blog.comment
+  ADD CONSTRAINT
+  comment_fk_userId
+FOREIGN KEY (useId)
+REFERENCES db_blog.user(id);
+
+ALTER TABLE db_blog.comment
+  ADD CONSTRAINT
+  comment_fk_blogId
+FOREIGN KEY (blogId)
+REFERENCES db_blog.blog(id);
+
+SELECT *
+FROM db_blog.user;
+
+SELECT *
+FROM db_blog.blog;
+
+SELECT *
+FROM db_blog.comment;
+
+INSERT INTO db_blog.blog VALUES (NULL ,'今天是个好日子',now(),'Java后端开发',1);
+
